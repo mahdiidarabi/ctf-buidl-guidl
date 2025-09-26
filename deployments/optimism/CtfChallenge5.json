@@ -1,0 +1,132 @@
+{
+  "address": "0xaD356a66B4535c2334f6a2F71BD19452F945b52f",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_challengeAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "stateMutability": "nonpayable",
+      "type": "fallback"
+    },
+    {
+      "inputs": [],
+      "name": "TARGET",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "callCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "challenge",
+      "outputs": [
+        {
+          "internalType": "contract IChallenge5",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "startClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x283cd92831872fb692198eeda82c75bc37ae2ead8f6040ece8d3e65b9e55dbc3",
+  "receipt": {
+    "to": null,
+    "from": "0x0b99DE6969399246fF1901432d7fe63DAC17bF8C",
+    "contractAddress": "0xaD356a66B4535c2334f6a2F71BD19452F945b52f",
+    "transactionIndex": 20,
+    "gasUsed": "314754",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xe47b2dcd4c9dd21ad31d9b42e653e7b079a76f3fe7791a143680b6dc53565d3a",
+    "transactionHash": "0x283cd92831872fb692198eeda82c75bc37ae2ead8f6040ece8d3e65b9e55dbc3",
+    "logs": [],
+    "blockNumber": 141651047,
+    "cumulativeGasUsed": "8047783",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0xB76AdFe9a791367A8fCBC2FDa44cB1a2c39D8F59"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "1563e30827da2b9208e08af80fb5cae7",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.28+commit.7893614a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_challengeAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"stateMutability\":\"nonpayable\",\"type\":\"fallback\"},{\"inputs\":[],\"name\":\"TARGET\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"callCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"challenge\",\"outputs\":[{\"internalType\":\"contract IChallenge5\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"startClaim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/CtfChallenge5.sol\":\"CtfChallenge5\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/CtfChallenge5.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.28;\\n\\ncontract CtfChallenge5 {\\n    IChallenge5 public challenge;\\n    uint256 public callCount = 0;\\n    uint256 public constant TARGET = 10;\\n\\n    constructor(address _challengeAddress) {\\n        challenge = IChallenge5(_challengeAddress);\\n    }\\n\\n    function startClaim() external {\\n        callCount = 0;\\n        challenge.claimPoints();\\n    }\\n\\n    // receive() external payable {\\n    //     if (callCount < TARGET) {\\n    //         callCount++;\\n    //         challenge.claimPoints();\\n    //     } else if (callCount == TARGET) {\\n    //         callCount++;\\n    //         challenge.mintFlag();\\n    //     }\\n    // }\\n\\n    fallback() external {\\n        if (callCount < TARGET) {\\n            callCount++;\\n            challenge.claimPoints();\\n        } else if (callCount == TARGET) {\\n            callCount++;\\n            challenge.mintFlag();\\n        }\\n    }\\n}\\n\\n\\ninterface IChallenge5 {\\n    function claimPoints() external;\\n    function mintFlag() external;\\n    function resetPoints() external;\\n}\",\"keccak256\":\"0x3b59d6c5e968ef5cba8cf604ea8dcaaaca08553c54a3f06c2a65cb1e1cd2bec6\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x6080604052600060015534801561001557600080fd5b50604051610553380380610553833981810160405281019061003791906100e0565b806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505061010d565b600080fd5b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b60006100ad82610082565b9050919050565b6100bd816100a2565b81146100c857600080fd5b50565b6000815190506100da816100b4565b92915050565b6000602082840312156100f6576100f561007d565b5b6000610104848285016100cb565b91505092915050565b6104378061011c6000396000f3fe608060405234801561001057600080fd5b50600436106100505760003560e01c80634b28f9a21461019f578063cc1f2afa146101bd578063d2ef7398146101db578063ecbfc077146101f957610051565b5b600a60015410156100f9576001600081548092919061006f906102f5565b919050555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166304d092c76040518163ffffffff1660e01b8152600401600060405180830381600087803b1580156100dc57600080fd5b505af11580156100f0573d6000803e3d6000fd5b5050505061019d565b600a6001540361019c5760016000815480929190610116906102f5565b919050555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663e00d023f6040518163ffffffff1660e01b8152600401600060405180830381600087803b15801561018357600080fd5b505af1158015610197573d6000803e3d6000fd5b505050505b5b005b6101a7610203565b6040516101b4919061034c565b60405180910390f35b6101c5610209565b6040516101d2919061034c565b60405180910390f35b6101e361020e565b6040516101f091906103e6565b60405180910390f35b610201610232565b005b60015481565b600a81565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600060018190555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166304d092c76040518163ffffffff1660e01b8152600401600060405180830381600087803b1580156102a257600080fd5b505af11580156102b6573d6000803e3d6000fd5b50505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000819050919050565b6000610300826102eb565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8203610332576103316102bc565b5b600182019050919050565b610346816102eb565b82525050565b6000602082019050610361600083018461033d565b92915050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b60006103ac6103a76103a284610367565b610387565b610367565b9050919050565b60006103be82610391565b9050919050565b60006103d0826103b3565b9050919050565b6103e0816103c5565b82525050565b60006020820190506103fb60008301846103d7565b9291505056fea2646970667358221220dca540b519cba2509be6ec2c05075654f849fce3127e5322951fa1e963d9114664736f6c634300081c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100505760003560e01c80634b28f9a21461019f578063cc1f2afa146101bd578063d2ef7398146101db578063ecbfc077146101f957610051565b5b600a60015410156100f9576001600081548092919061006f906102f5565b919050555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166304d092c76040518163ffffffff1660e01b8152600401600060405180830381600087803b1580156100dc57600080fd5b505af11580156100f0573d6000803e3d6000fd5b5050505061019d565b600a6001540361019c5760016000815480929190610116906102f5565b919050555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663e00d023f6040518163ffffffff1660e01b8152600401600060405180830381600087803b15801561018357600080fd5b505af1158015610197573d6000803e3d6000fd5b505050505b5b005b6101a7610203565b6040516101b4919061034c565b60405180910390f35b6101c5610209565b6040516101d2919061034c565b60405180910390f35b6101e361020e565b6040516101f091906103e6565b60405180910390f35b610201610232565b005b60015481565b600a81565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600060018190555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166304d092c76040518163ffffffff1660e01b8152600401600060405180830381600087803b1580156102a257600080fd5b505af11580156102b6573d6000803e3d6000fd5b50505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000819050919050565b6000610300826102eb565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8203610332576103316102bc565b5b600182019050919050565b610346816102eb565b82525050565b6000602082019050610361600083018461033d565b92915050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b60006103ac6103a76103a284610367565b610387565b610367565b9050919050565b60006103be82610391565b9050919050565b60006103d0826103b3565b9050919050565b6103e0816103c5565b82525050565b60006020820190506103fb60008301846103d7565b9291505056fea2646970667358221220dca540b519cba2509be6ec2c05075654f849fce3127e5322951fa1e963d9114664736f6c634300081c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 4,
+        "contract": "contracts/CtfChallenge5.sol:CtfChallenge5",
+        "label": "challenge",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_contract(IChallenge5)76"
+      },
+      {
+        "astId": 7,
+        "contract": "contracts/CtfChallenge5.sol:CtfChallenge5",
+        "label": "callCount",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      }
+    ],
+    "types": {
+      "t_contract(IChallenge5)76": {
+        "encoding": "inplace",
+        "label": "contract IChallenge5",
+        "numberOfBytes": "20"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

@@ -26,15 +26,29 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // Implement toEthSignedMessageHash equivalent in JavaScript
   const prefix = ethers.toUtf8Bytes("\x19Ethereum Signed Message:\n32"); // Prefix as bytes
   const combined = ethers.concat([prefix, ethers.getBytes(messageHash)]); // Concatenate prefix and messageHash
-  const ethSignedMessageHash = ethers.keccak256(combined); // keccak256(prefix + messageHash)
-  //   0x8e60166d37d05ce89959a3599a67f10c4b81e3efd48c7974177e06bda61ca42f
+//   const ethSignedMessageHash = ethers.keccak256(combined); // keccak256(prefix + messageHash)
+  const ethSignedMessageHash =  "0x8e60166d37d05ce89959a3599a67f10c4b81e3efd48c7974177e06bda61ca42f"
 
   // Generate the signature
-  const signature = await challenge4Account.signMessage(ethers.getBytes(ethSignedMessageHash));
+//   const signature = await challenge4Account.signMessage(ethers.getBytes(ethSignedMessageHash));
+
+// Sign the raw digest (no extra prefixing)
+    const digest = ethers.getBytes(ethSignedMessageHash);
+    const signed = challenge4Account.signingKey.sign(digest);
+
+    // Format signature as hex string (r + s + v)
+    const signature = ethers.concat([
+    ethers.getBytes(signed.r),
+    ethers.getBytes(signed.s),
+    new Uint8Array([signed.v])
+    ]);
+    const signatureHex = ethers.hexlify(signature);
+
 
   console.log("Message Hash:", messageHash);
   console.log("Ethereum Signed Message Hash:", ethSignedMessageHash);
   console.log("Signature:", signature);
+  console.log("Signature:", signatureHex);
   console.log("Signer Address:", challenge4Account.address);
 
   const recoveredAddress = ethers.verifyMessage(ethers.getBytes(ethSignedMessageHash), signature);
