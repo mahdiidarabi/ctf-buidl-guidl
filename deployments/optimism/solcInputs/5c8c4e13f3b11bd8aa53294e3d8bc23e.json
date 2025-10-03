@@ -1,0 +1,36 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/CtfChallenge9.sol": {
+      "content": "// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.28;\n\ncontract CtfChallenge9 {\n\n    event newPasswordGenerated(bytes32 password);\n\n    bytes32 public password;\n    uint256 public count;\n\n    constructor(bytes32 _password, uint256 _count) {\n        password = _password;\n        count = _count;\n    }\n\n\n    function generateNewPassword() public {\n        bytes32 mask = ~(bytes32(uint256(0xFF) << ((31 - (count % 32)) * 8)));\n        bytes32 newPassword = password & mask;\n        emit newPasswordGenerated(newPassword);\n    }\n}\n\n\ninterface IChallenge6 {\n    function count() external view returns (uint256);\n    function mintFlag(uint256 _count) external;\n}"
+    }
+  },
+  "settings": {
+    "evmVersion": "paris",
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

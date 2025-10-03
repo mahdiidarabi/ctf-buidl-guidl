@@ -3,6 +3,9 @@ import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import * as dotenv from "dotenv";
 
+import "./tasks/readStorage";
+import "./tasks/calcRlp";
+
 dotenv.config();
 
 const config: HardhatUserConfig = {
