@@ -13,7 +13,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   log(`Deploying CtfChallenge12 to network ${network.name} with deployer ${deployer}`);
 
-  const provider = new ethers.JsonRpcProvider("https://optimism.api.onfinality.io/public");
+  const flagCaptured = true;
+
+  if (!flagCaptured) {
+    const provider = new ethers.JsonRpcProvider("https://optimism.api.onfinality.io/public");
   const contractAddress = "0x8c7A3c2c44aB16f693d1731b10C271C7d2967769";
 
   const contract = new ethers.Contract(
@@ -82,7 +85,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     console.log(`Transaction sent: ${tx.hash}`);
     await tx2.wait();
     console.log("mintFlag executed successfully");
-};
+
+  }
+
+  };
 
 export default func;
 func.tags = ["CtfChallenge12", "all"];

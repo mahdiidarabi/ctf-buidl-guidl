@@ -6,4 +6,5 @@ export * as ctfChallenge3Sol from "./CtfChallenge3.sol";
 export * as ctfChallenge5Sol from "./CtfChallenge5.sol";
 export * as ctfChallenge6Sol from "./CtfChallenge6.sol";
 export * as ctfChallenge9Sol from "./CtfChallenge9.sol";
+export { CtfChallenge11__factory } from "./CtfChallenge11__factory";
 export { CtfChallenge4__factory } from "./CtfChallenge4__factory";

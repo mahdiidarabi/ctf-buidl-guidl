@@ -5,6 +5,7 @@ import * as dotenv from "dotenv";
 
 import "./tasks/readStorage";
 import "./tasks/calcRlp";
+import "./tasks/predictAddress";
 
 dotenv.config();
 

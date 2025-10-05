@@ -1,0 +1,36 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/CtfChallenge11.sol": {
+      "content": "// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.28;\n\ncontract CtfChallenge11 {\n\n    event senderLastGenerated(uint8 sLast);\n\n    constructor() {}\n\n    function generateNewSenderLast() public {\n        uint8 senderLast = uint8(abi.encodePacked(msg.sender)[19]);\n        uint8 senderLast2 = uint8(senderLast & 0x15);\n        emit senderLastGenerated(senderLast);\n        emit senderLastGenerated(senderLast2);\n    }\n\n}"
+    }
+  },
+  "settings": {
+    "evmVersion": "paris",
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

@@ -11,4 +11,5 @@ import type * as ctfChallenge6Sol from "./CtfChallenge6.sol";
 export type { ctfChallenge6Sol };
 import type * as ctfChallenge9Sol from "./CtfChallenge9.sol";
 export type { ctfChallenge9Sol };
+export type { CtfChallenge11 } from "./CtfChallenge11";
 export type { CtfChallenge4 } from "./CtfChallenge4";

@@ -671,6 +671,49 @@
         "CtfChallenge9",
         "IChallenge6"
       ]
+    },
+    "/home/mhd/Work/src/github.com/mahdiidarabi/ctf-buidl-guidl/contracts/CtfChallenge11.sol": {
+      "lastModificationDate": 1759593314736,
+      "contentHash": "d4f58823b6ef4c1f7cb9865351c57363",
+      "sourceName": "contracts/CtfChallenge11.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "CtfChallenge11"
+      ]
     }
   }
 }
