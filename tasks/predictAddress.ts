@@ -1,16 +1,17 @@
 import { task } from "hardhat/config";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { getAddress, getCreateAddress, getCreate2Address, keccak256, hexlify, toBeHex, ethers } from 'ethers';
-import { getNamedAccounts } from "hardhat";
+import { getCreateAddress, getCreate2Address, keccak256, ethers } from 'ethers';
 
 task("predict-address", "Reads private variables from Challenge9 contract storage")
   .addParam("sender", "The Challenge deployer address")
   .addParam("nonce", "The Challenge deployer nonce")
   .setAction(async (taskArgs: { sender: string, nonce: number }, hre: HardhatRuntimeEnvironment) => {
+    console.log("fffff")
 
     const { sender, nonce } = taskArgs;
+    const nonceAsNumber = Number(nonce)
 
-    const { deployer } = await getNamedAccounts();
+    const { deployer } = await hre.getNamedAccounts();
     const signer = await hre.ethers.getSigner(deployer);
 
     const provider = new ethers.JsonRpcProvider("https://optimism.api.onfinality.io/public");
@@ -21,24 +22,24 @@ task("predict-address", "Reads private variables from Challenge9 contract storag
       ["function preMintFlag() external"],
       signer
     );
-    const tx = await contract.preMintFlag();
-    console.log("Transaction sent:", tx);
-    await tx.wait();
-    console.log("mintFlag executed successfully");
 
-    // Add sleep for 2 seconds
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // const tx = await contract.preMintFlag();
+    // console.log("Transaction sent:", tx);
+    // await tx.wait();
+    // console.log("mintFlag executed successfully");
+
+    // // Add sleep for 2 seconds
+    // await new Promise(resolve => setTimeout(resolve, 5000));
 
     let isFind = false
 
     let preferedNonce = BigInt(0);
 
-    for (let i = nonce; i < nonce + 1000; i++) {
-      preferedNonce = BigInt(nonce) + BigInt(i);
+    for (let i = nonceAsNumber; i < nonceAsNumber + 1000; i++) {
+      preferedNonce = BigInt(i);
       let predictedAddress = predictCreateAddress(sender, preferedNonce);
       if (predictedAddress.slice(-2) === sender.slice(-2)) {
         console.log("address", predictedAddress);
-        console.log("nonce", nonce);
         console.log("i", i);
         console.log("prefered nonce", preferedNonce);
         isFind = true
@@ -51,7 +52,17 @@ task("predict-address", "Reads private variables from Challenge9 contract storag
       console.log("nothing find in next 1000 nonces")
     }
 
-    // for (let j = nonce; j < )
+    const finalNonce = Number(preferedNonce.toString(10))
+
+    for (let i = nonceAsNumber; i < finalNonce; i++) {
+      const tx = await contract.preMintFlag();
+      console.log("Transaction sent:", tx);
+      await tx.wait();
+      console.log("mintFlag executed successfully");
+
+      // Add sleep for 2 seconds
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    }
       
   });
 

@@ -673,8 +673,8 @@
       ]
     },
     "/home/mhd/Work/src/github.com/mahdiidarabi/ctf-buidl-guidl/contracts/CtfChallenge11.sol": {
-      "lastModificationDate": 1759593314736,
-      "contentHash": "d4f58823b6ef4c1f7cb9865351c57363",
+      "lastModificationDate": 1759665146698,
+      "contentHash": "a2347cea9ce5a5ac26b710ddca09c987",
       "sourceName": "contracts/CtfChallenge11.sol",
       "solcConfig": {
         "version": "0.8.28",
@@ -712,7 +712,8 @@
         "^0.8.28"
       ],
       "artifacts": [
-        "CtfChallenge11"
+        "CtfChallenge11",
+        "IChallenge11"
       ]
     }
   }

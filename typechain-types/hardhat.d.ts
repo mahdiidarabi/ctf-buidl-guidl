@@ -34,6 +34,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CtfChallenge11__factory>;
     getContractFactory(
+      name: "IChallenge11",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IChallenge11__factory>;
+    getContractFactory(
       name: "CtfChallenge2",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CtfChallenge2__factory>;
@@ -104,6 +108,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.CtfChallenge11>;
     getContractAt(
+      name: "IChallenge11",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IChallenge11>;
+    getContractAt(
       name: "CtfChallenge2",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -180,6 +189,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CtfChallenge11>;
     deployContract(
+      name: "IChallenge11",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IChallenge11>;
+    deployContract(
       name: "CtfChallenge2",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CtfChallenge2>;
@@ -249,6 +262,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CtfChallenge11>;
+    deployContract(
+      name: "IChallenge11",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IChallenge11>;
     deployContract(
       name: "CtfChallenge2",
       args: any[],
