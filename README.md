@@ -1,25 +1,53 @@
+This repository contains the solutions for  BuidlGuidl CTF challenge (https://ctf.buidlguidl.com/).
+
+The challenge tests users' skills in Solidity focusing on security. 
+
+In the following lines I'll describe each challenge and the solution, you can also found the solution codes in this repo.
+
+
+## Challenge 1
+
+The first challenge only wants users to call a function. you need to have a wallet to interact with the network (in this case Optimism), and easily can connet your wallet to the optimism scan and call the function (ax). you can also use other ways to call the fucntion like remix ide, etc. 
+
+
+
+
 ## Challenge 2
 
-you only need to have a contract to call the target contract
+the requirement of this challenge is msg.sender != tx.origin. 
 
-you can find it at contracts/CtfChallenge2.sol 
+In Solidity msg.sender is the account calling a function and tx.origin is the account (externally owned account) that initiated the transaction (or function call). 
 
-after deployment and verification on network call 
+If a user send a transaction (like a function call) with their wallet. the msg.sender and tx.origin are same. but if a user call a function from contract_1 and in that function, there was a call to another contract (like contract_2), in contract_2, msg.sender would be contract_1, and tx.origin would be the user. 
+(ax)
 
-indirectCall(target_address)
+So you only need to have a contract to call the target contract. A simple contract is created for this purpose can be found at contracts/CtfChallenge2.sol file. 
 
-the target address is challenge2_contract_address
+After deployment and verification of the solution contract for challenge 2, call 
+
+indirectCall(target_address) functoin and pass challenge2_contract_address as argument. 
 
 
 ## Challenge 3
 
-the challenge contract checks if the caller has code in their storage and fails if have code. 
+To pass this challenge you need to have a contract to call the challenge contract like challenge 2, but with a difference, the contract that calls the cahllenge contract should not have any code in their storage during the call.  
+But how it's possible?!
 
-So we need to call the challenge contract in constructor (before storing the code in contract account storage)
+Before explaining the solution you need to know that in EVM based networks, there are 2 types of accounts, externally owned and internally owned. 
+externally owned accounts are wallets and internally owned accounts are contracts.
 
-you can find solution at contracts/CtfChallenge3.sol 
+every account has a storage on the network containing nonce, ether balance, code, etc. 
+For externally owned accounts there is no code, but for internally owned ones there's some code (so the length of the code is not 0).
 
-you need to deploy contract with challenge3_contract_address argument
+(ax)
+
+To pass the requirement of this challenge we need to have a contract (for indirect call), and with no code in its storage, its impossble unless during the creation of the contract.
+
+So we need to call the challenge contract in constructor (before storing the code in contract account storage).
+
+you can find the solution at contracts/CtfChallenge3.sol 
+
+you need to deploy contract with challenge3_contract_address as argument to pass this challenge.
 
 
 ## Challenge 4
