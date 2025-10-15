@@ -58,6 +58,7 @@ you need to deploy contract with challenge3_contract_address as argument to pass
 
 ```
 npm run deploy:op
+npm run verify:op
 ```
 
 
@@ -194,6 +195,7 @@ After deployment of the solution contract by
 
 ```
 npm run deploy:op
+npm run verify:op
 ```
 
 Call its startMint function, you may got an error since the last requirement of challenge_6 is about remained gas. Check how much gas you have set and how much remained (from error log) and change your transaction fee to pass the requirement. 
@@ -219,22 +221,139 @@ then call mintFlag (https://optimistic.etherscan.io/address/0xC962D4f4E772415475
 
 ## Challenge 8
 
+This contract is unverified and the ABI is not available, so you need to decompile the challenge contract to find function signature (4 bytes) and arguments types. 
+
+Then you can call the function with the argument.
+
+You can decompile with these online tools. 
+
 https://abi.ninja/ 
 
+(ax)
+
 https://app.dedaub.com/decompile?md5=2aa6cef0a572ebb71f26c409eca79463 
+
+(ax)
+
 
 https://ethervm.io/decompile 
 
 
 ## Challenge 9
 
-I think the easiest way to bypass the complex requirement of this challenge is to recreate it by myself. but there is only one problem the variables that the challenge contract is using are private and can not accessed from another contract. so first we need to extract and after finding the value of that private variables the solution is at contracts/CtfChallenge6.sol
+This challenge has a complex logic to create a password. The password must be created using private variables in the contract. So first we need to find those private variables, then create password. 
+
+```
+  bytes32 private password;
+  uint256 private count;
+```
+
+Since these variables are stored as second and third variables, we can read them from storage of the contract. 
+
+```
+const password = await provider.getStorage(contractAddress, 1); // Slot 1: bytes32 password
+const count = await provider.getStorage(contractAddress, 2);   // Slot 2: uint256 count
+```
+
+you can find how to read the storage at tasks/readStorage.ts file
+
+to run the file and get these variables run:
+
+
+```
+npx hardhat read-storage --contract 0x1Fd913F2250ae5A4d9F8881ADf3153C6e5E2cBb1 --network optimism
+```
+
+after getting private variables put them in the deployment script at deploy/009_deploy_ctfchallenge9.ts and deploy and verify the solution contract for challenge 9. 
+
+by calling generateNewPassword(bytes32 password, uint256 count) function, the required password to pass this challenge will be generated and emmited on network. you can see at transaction logs. and pass as argument to  mintFlag function of the challenge 9 contract. 
+
 
 ## Challenge 10
 
+By checking the challenge 10 contract, we recognize that in the following function we can get this step's flag. 
+
+```
+function onERC721Received(
+        address,
+        address from,
+        uint256 tokenId,
+        bytes calldata data
+    ) external override returns (bytes4) {
+        uint256 anotherTokenId = _toUint256(data);
+
+        require(msg.sender == address(this), "only this contract can call this function!");
+
+        require(ownerOf(anotherTokenId) == from, "Not owner!");
+
+        require(tokenIdToChallengeId[tokenId] == 1, "Not the right token 1!");
+        require(tokenIdToChallengeId[anotherTokenId] == 9, "Not the right token 9!");
+
+        _mintToken(from, 10);
+
+        safeTransferFrom(address(this), from, tokenId);
+
+        return this.onERC721Received.selector;
+    }
+```
+
+You should find the token id of your flag (NFT) for challenge 1 and token id yor flag (NFT) for challenge 9. 
+
+and call safeTransferFrom (0xb88d4fde)
+
+with these arguments:
+
+0	from	address YOUR_ADDRESS
+1	to	address CHALLENGE_10_CONTRACT_ADDRESS
+2	tokenId	uint256 FLAG_1_TOKEN_ID (in uint)
+3	data	bytes FLAG_9_TOKEN_ID (in hex string padded with 0s to become 32 bytes, 64 characters)
+
+
+
 ## Challenge 11
 
+This challenge's requirement is easy like challenge 2 (msg.sender != tx.origin), But with a big difference!!!
+
+The last byte of user address and the contract address (for indirect call) must be same. 
+But how it's possible?!
+
+In EVM the contract address is predictable. There are 2 ways to create a contract and in both the contract address can be calculated before deployment. 
+
+```
+import { getCreateAddress, getCreate2Address, keccak256, ethers } from 'ethers';
+
+ function predictCreateAddress(deployer: string, nonce: bigint): string {
+    return getCreateAddress({ from: deployer, nonce });
+  }
+  
+  function predictCreate2Address(deployer: string, salt: string, bytecode: string): string {
+    const initCodeHash = keccak256(bytecode);
+    return getCreate2Address(deployer, salt, initCodeHash);
+  }
+```
+
+The first way is to create a contract with CREATE opcode, in this way the contract address is calculated based on deployer address and its nonce. 
+
+the second way is to create a contract with CREATE2 opcode, in this way the contract address is calculated based on deployer address, a salt, and the hash of the contract code. 
+
+the optimized way to solve this challenge is to use 2nd way and change salt many times to find an address that its last byes would be equal to deployer address last byte. 
+
+the easier way is to find a nonce that pass the requirement and do many transactions to reach that nonce (a number before that none). and deploy the solution contract. Then the contract address last byte and deployer address last byte will be same.
+
+you can find the non optimized solution at tasks/predictAddress.ts
+
+and can run it by 
+
+```
+npx hardhat predict-address --sender 0x0b99DE6969399246fF1901432d7fe63DAC17bF8C --nonce 10 --network optimism
+```
+
+but this command won't work for you and you have to change it.
+
+
 ## Challenge 12
+
+
 
 
 
