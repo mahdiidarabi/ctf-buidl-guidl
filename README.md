@@ -183,24 +183,47 @@ after deployment of solution contract you need to call startClaim function from 
 
 ## Challenge 6
 
-in challenge 6 you should bypass 3 requirements, twos are about checking a code and a name, and I think easiest way is to use the challenge6_contract logic in our solution contract. 
+In challenge 6 you should bypass 3 requirements, twos are about checking a code and a name, and the last one is to have reamined gas between 190,000 and 200,000.
 
-the solution contract is at contracts/CtfChallenge6.sol
+I think the easiest way to bypass first 2 requirements is to use the challenge6_contract logic in our solution contract. 
 
-after deployment of solution contract call its startMint function, you may got an error since the last requirement of challenge_6 is about remained gas. 
-send a transaction and if failed check its log and find out how much gas you should set for the transaction
+You can fing the way to do this at contracts/CtfChallenge6.sol fild.
+
+
+After deployment of the solution contract by
+
+```
+npm run deploy:op
+```
+
+Call its startMint function, you may got an error since the last requirement of challenge_6 is about remained gas. Check how much gas you have set and how much remained (from error log) and change your transaction fee to pass the requirement. 
 
 
 ## Challenge 7
 
-challenge 7 is about delegation in EVM. 
+challenge 7 is about delegation in EVM. But what is delegation?
 
-claim ownership of the challenge 7 contract by calling claimOwnership on it. the target contract does not have this function, but has a fallback function and the logic contract has claimOwnership. you can use Write as proxy in 
-https://optimistic.etherscan.io/address/0xC962D4f4E772415475AA46Eed06cb1F2D4010c0A#writeProxyContract
-and then call mintFlag function of challenge7_contract
+In Solidity we have delegation concept. If we call a function from a contract, in the case that function does not exist, the fallback function will be called. 
+And in fallback it's possible to delegate the call to another contract (that has that function) but the changes that function made to the contract storage is applied on the first contract (with the fallback function that delegates the call).
+
+This capability in Solidity allows developer to create a new concept, Upgradeable contracts with Logic and Storage contracts. 
+
+The Storage contract has a fallback function that delegate contract calls to the Logic contract (it's upgradeable because we can change Logic contract address in Storage contrat so the calls will be delegated to a new Logic contract).
+
+By checking challenge 7 contract we noticed that we must be the owner of the contract to call mintFlag, but there's no function to claim ownership in the challenge 7 contract. 
+But it has a fallback function and the Logic contract has claimOwnership function. 
+So first call claimOwnership by write as proxy (https://optimistic.etherscan.io/address/0xC962D4f4E772415475AA46Eed06cb1F2D4010c0A#writeProxyContract)
+
+then call mintFlag (https://optimistic.etherscan.io/address/0xC962D4f4E772415475AA46Eed06cb1F2D4010c0A#writeContract).
 
 
 ## Challenge 8
+
+https://abi.ninja/ 
+
+https://app.dedaub.com/decompile?md5=2aa6cef0a572ebb71f26c409eca79463 
+
+https://ethervm.io/decompile 
 
 
 ## Challenge 9
