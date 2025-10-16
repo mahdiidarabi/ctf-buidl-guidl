@@ -1,4 +1,4 @@
-This repository contains the solutions for  BuidlGuidl CTF challenge (https://ctf.buidlguidl.com/).
+This repository contains the solutions for  [BuidlGuidl CTF challenge](https://ctf.buidlguidl.com/).
 
 The challenge tests users' skills in Solidity focusing on security. 
 
@@ -8,7 +8,12 @@ In the following sections I'll describe each challenge and the solution, you can
 
 ## Challenge 1
 
-The first challenge only wants users to call registerMe(string memory _name) function of the challenge 1 contract (https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#code). you need to have a wallet to interact with the network (in this case Optimism), and easily can connect your wallet to the optimism scan (https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#writeContract) and call the function (ax). you can also use other ways to call the function like remix ide, etc. 
+The first challenge only wants users to call registerMe(string memory _name) function of the [challenge 1 contract](https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#code). you need to have a wallet to interact with the network (in this case Optimism), and easily can connect your wallet to the [optimism scan](https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#writeContract) and call the function. 
+
+![connectWalletToOptimismScan](./pictures/connectWalletToOptimismScan.png)
+
+
+you can also use other ways to call the function like remix ide, etc. 
 
 
 
@@ -19,7 +24,10 @@ the requirement of this challenge is msg.sender != tx.origin.
 In Solidity msg.sender is the account calling a function and tx.origin is the account (externally owned account) that initiated the transaction (or function call). 
 
 If a user send a transaction (like a function call) with their wallet then msg.sender = tx.origin. but if a user call a function from contract_1 and in that function, there was a call to another contract (like contract_2), in the function of contract_2, msg.sender would be contract_1, and tx.origin would be the user address. 
-(ax)
+
+
+[![msgSenderVsTxOrigin](./pictures/msgSenderVsTxOrigin.png)](https://blockchain-academy.hs-mittweida.de/courses/solidity-coding-beginners-to-intermediate/lessons/solidity-5-calling-other-contracts-visibility-state-access/topic/tx-origin-and-msg-sender/)
+
 
 So you only need to have a contract to call the target contract. A simple contract is created for this purpose can be found at contracts/CtfChallenge2.sol file. 
 
@@ -47,7 +55,8 @@ externally owned accounts are wallets and internally owned accounts are smart co
 every account has a storage on the network containing nonce, ether balance, code, etc. 
 For externally owned accounts there is no code, but for internally owned ones there's some code (so the length of the code is not 0).
 
-(ax)
+[![accountState](./pictures/accountState.png)](https://decentralizedsecurity.es/eip-7702-ethereums-next-step-toward-a-more-flexible-account-model)
+
 
 To pass the requirement of this challenge we need to have a contract (for indirect call), with no code in its storage. its impossible unless during the creation of the contract, since the code is not stored yet.
 
@@ -230,11 +239,11 @@ You can decompile with these online tools.
 
 https://abi.ninja/ 
 
-(ax)
+![abiNinja](./pictures/abiNinja.png)
+
 
 https://app.dedaub.com/decompile?md5=2aa6cef0a572ebb71f26c409eca79463 
 
-(ax)
 
 
 https://ethervm.io/decompile 
