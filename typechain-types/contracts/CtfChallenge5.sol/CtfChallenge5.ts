@@ -7,7 +7,6 @@ import type {
   FunctionFragment,
   Result,
   Interface,
-  EventFragment,
   ContractRunner,
   ContractMethod,
   Listener,
@@ -16,7 +15,6 @@ import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
-  TypedLogDescription,
   TypedListener,
   TypedContractMethod,
 } from "../../common";
@@ -25,10 +23,6 @@ export interface CtfChallenge5Interface extends Interface {
   getFunction(
     nameOrSignature: "TARGET" | "callCount" | "challenge" | "startClaim"
   ): FunctionFragment;
-
-  getEvent(
-    nameOrSignatureOrTopic: "fallbackCalled" | "recieveCalled"
-  ): EventFragment;
 
   encodeFunctionData(functionFragment: "TARGET", values?: undefined): string;
   encodeFunctionData(functionFragment: "callCount", values?: undefined): string;
@@ -42,26 +36,6 @@ export interface CtfChallenge5Interface extends Interface {
   decodeFunctionResult(functionFragment: "callCount", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "challenge", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "startClaim", data: BytesLike): Result;
-}
-
-export namespace fallbackCalledEvent {
-  export type InputTuple = [];
-  export type OutputTuple = [];
-  export interface OutputObject {}
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace recieveCalledEvent {
-  export type InputTuple = [];
-  export type OutputTuple = [];
-  export interface OutputObject {}
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export interface CtfChallenge5 extends BaseContract {
@@ -132,42 +106,5 @@ export interface CtfChallenge5 extends BaseContract {
     nameOrSignature: "startClaim"
   ): TypedContractMethod<[], [void], "nonpayable">;
 
-  getEvent(
-    key: "fallbackCalled"
-  ): TypedContractEvent<
-    fallbackCalledEvent.InputTuple,
-    fallbackCalledEvent.OutputTuple,
-    fallbackCalledEvent.OutputObject
-  >;
-  getEvent(
-    key: "recieveCalled"
-  ): TypedContractEvent<
-    recieveCalledEvent.InputTuple,
-    recieveCalledEvent.OutputTuple,
-    recieveCalledEvent.OutputObject
-  >;
-
-  filters: {
-    "fallbackCalled()": TypedContractEvent<
-      fallbackCalledEvent.InputTuple,
-      fallbackCalledEvent.OutputTuple,
-      fallbackCalledEvent.OutputObject
-    >;
-    fallbackCalled: TypedContractEvent<
-      fallbackCalledEvent.InputTuple,
-      fallbackCalledEvent.OutputTuple,
-      fallbackCalledEvent.OutputObject
-    >;
-
-    "recieveCalled()": TypedContractEvent<
-      recieveCalledEvent.InputTuple,
-      recieveCalledEvent.OutputTuple,
-      recieveCalledEvent.OutputObject
-    >;
-    recieveCalled: TypedContractEvent<
-      recieveCalledEvent.InputTuple,
-      recieveCalledEvent.OutputTuple,
-      recieveCalledEvent.OutputObject
-    >;
-  };
+  filters: {};
 }

@@ -15,7 +15,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   await deploy("CtfChallenge9", {
     from: deployer,
-    args: ["0xf6bd6ed5c530908225e7ea1ac072bde94b180a706c43bb253d3efd7ecb17ff3b", 39],
+    // args: ["0xf6bd6ed5c530908225e7ea1ac072bde94b180a706c43bb253d3efd7ecb17ff3b", 39],
+    args: [],
     log: true,
     waitConfirmations: network.live ? 3 : 1,
   });

@@ -1,0 +1,89 @@
+{
+  "address": "0x719B3C568558C82bca81994509cD73597131ed8C",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_challengeAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "challenge",
+      "outputs": [
+        {
+          "internalType": "contract IChallenge11",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "mintFlag",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x07efba04e4516918a28b792d13f5df586598fc121126dfd5cdb8c8d4a1f599b5",
+  "receipt": {
+    "to": null,
+    "from": "0x0b99DE6969399246fF1901432d7fe63DAC17bF8C",
+    "contractAddress": "0x719B3C568558C82bca81994509cD73597131ed8C",
+    "transactionIndex": 11,
+    "gasUsed": "182006",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x318561298025c48d81290a38e9daf34d2d6aa8cc54bc63859485163c4e52d3e9",
+    "transactionHash": "0x07efba04e4516918a28b792d13f5df586598fc121126dfd5cdb8c8d4a1f599b5",
+    "logs": [],
+    "blockNumber": 142033940,
+    "cumulativeGasUsed": "2613334",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x67392ea0A56075239988B8E1E96663DAC167eF54"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "ac9b25ba3bd8810503950d40c1daf9ff",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.28+commit.7893614a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_challengeAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"challenge\",\"outputs\":[{\"internalType\":\"contract IChallenge11\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"mintFlag\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/CtfChallenge11.sol\":\"CtfChallenge11\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/CtfChallenge11.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.28;\\n\\ncontract CtfChallenge11 {\\n\\n    // event senderLastGenerated(uint8 sLast);\\n\\n    // constructor() {}\\n\\n    // function generateNewSenderLast() public {\\n    //     uint8 senderLast = uint8(abi.encodePacked(msg.sender)[19]);\\n    //     uint8 senderLast2 = uint8(senderLast & 0x15);\\n    //     emit senderLastGenerated(senderLast);\\n    //     emit senderLastGenerated(senderLast2);\\n    // }\\n\\n    IChallenge11 public challenge;\\n\\n    constructor(address _challengeAddress) {\\n        challenge = IChallenge11(_challengeAddress);\\n    }\\n\\n    function mintFlag() external {\\n        challenge.mintFlag();\\n    }\\n}\\n\\ninterface IChallenge11 {\\n    function mintFlag() external;\\n}\",\"keccak256\":\"0x7cec1183667d3c5ee106ec67150b9f9af5720e2899812fd5e719f2c40b98e7e2\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516102f03803806102f0833981810160405281019061003291906100db565b806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610108565b600080fd5b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b60006100a88261007d565b9050919050565b6100b88161009d565b81146100c357600080fd5b50565b6000815190506100d5816100af565b92915050565b6000602082840312156100f1576100f0610078565b5b60006100ff848285016100c6565b91505092915050565b6101d9806101176000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c8063d2ef73981461003b578063e00d023f14610059575b600080fd5b610043610063565b6040516100509190610188565b60405180910390f35b610061610087565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663e00d023f6040518163ffffffff1660e01b8152600401600060405180830381600087803b1580156100ef57600080fd5b505af1158015610103573d6000803e3d6000fd5b50505050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b600061014e61014961014484610109565b610129565b610109565b9050919050565b600061016082610133565b9050919050565b600061017282610155565b9050919050565b61018281610167565b82525050565b600060208201905061019d6000830184610179565b9291505056fea264697066735822122057777233ff26ab022f0103eeefaad7d625d1bbdcdefe52977ec47f4df019483064736f6c634300081c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c8063d2ef73981461003b578063e00d023f14610059575b600080fd5b610043610063565b6040516100509190610188565b60405180910390f35b610061610087565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663e00d023f6040518163ffffffff1660e01b8152600401600060405180830381600087803b1580156100ef57600080fd5b505af1158015610103573d6000803e3d6000fd5b50505050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b600061014e61014961014484610109565b610129565b610109565b9050919050565b600061016082610133565b9050919050565b600061017282610155565b9050919050565b61018281610167565b82525050565b600060208201905061019d6000830184610179565b9291505056fea264697066735822122057777233ff26ab022f0103eeefaad7d625d1bbdcdefe52977ec47f4df019483064736f6c634300081c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 4,
+        "contract": "contracts/CtfChallenge11.sol:CtfChallenge11",
+        "label": "challenge",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_contract(IChallenge11)30"
+      }
+    ],
+    "types": {
+      "t_contract(IChallenge11)30": {
+        "encoding": "inplace",
+        "label": "contract IChallenge11",
+        "numberOfBytes": "20"
+      }
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "address": "0xdE60726002BBaA43c919cAB6fE839bd09e443A01",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_password",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_count",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "password",
+          "type": "bytes32"
+        }
+      ],
+      "name": "newPasswordGenerated",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "count",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "generateNewPassword",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "password",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x00561cb03b046bf5f62002c232d947458dc6d5eba9a7a2dfd6df29de9e4709d8",
+  "receipt": {
+    "to": null,
+    "from": "0x0b99DE6969399246fF1901432d7fe63DAC17bF8C",
+    "contractAddress": "0xdE60726002BBaA43c919cAB6fE839bd09e443A01",
+    "transactionIndex": 28,
+    "gasUsed": "250298",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x7858f0aca5c5015940344f961e5e7e5924932cdcf1590ea07f82950cce1b52cf",
+    "transactionHash": "0x00561cb03b046bf5f62002c232d947458dc6d5eba9a7a2dfd6df29de9e4709d8",
+    "logs": [],
+    "blockNumber": 141935896,
+    "cumulativeGasUsed": "9028581",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0xf6bd6ed5c530908225e7ea1ac072bde94b180a706c43bb253d3efd7ecb17ff3b",
+    39
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "5c8c4e13f3b11bd8aa53294e3d8bc23e",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.28+commit.7893614a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_password\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"_count\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"password\",\"type\":\"bytes32\"}],\"name\":\"newPasswordGenerated\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"count\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"generateNewPassword\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"password\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/CtfChallenge9.sol\":\"CtfChallenge9\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/CtfChallenge9.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.28;\\n\\ncontract CtfChallenge9 {\\n\\n    event newPasswordGenerated(bytes32 password);\\n\\n    bytes32 public password;\\n    uint256 public count;\\n\\n    constructor(bytes32 _password, uint256 _count) {\\n        password = _password;\\n        count = _count;\\n    }\\n\\n\\n    function generateNewPassword() public {\\n        bytes32 mask = ~(bytes32(uint256(0xFF) << ((31 - (count % 32)) * 8)));\\n        bytes32 newPassword = password & mask;\\n        emit newPasswordGenerated(newPassword);\\n    }\\n}\\n\\n\\ninterface IChallenge6 {\\n    function count() external view returns (uint256);\\n    function mintFlag(uint256 _count) external;\\n}\",\"keccak256\":\"0x49f756ef472ddff62083bce421dbf26a618804dfd56d6fb2b10fbcc662ca574c\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516103b93803806103b9833981810160405281019061003291906100b8565b816000819055508060018190555050506100f8565b600080fd5b6000819050919050565b61005f8161004c565b811461006a57600080fd5b50565b60008151905061007c81610056565b92915050565b6000819050919050565b61009581610082565b81146100a057600080fd5b50565b6000815190506100b28161008c565b92915050565b600080604083850312156100cf576100ce610047565b5b60006100dd8582860161006d565b92505060206100ee858286016100a3565b9150509250929050565b6102b2806101076000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c806306661abd14610046578063224b610b14610064578063eca8cc2c14610082575b600080fd5b61004e61008c565b60405161005b9190610128565b60405180910390f35b61006c610092565b604051610079919061015c565b60405180910390f35b61008a610098565b005b60015481565b60005481565b6000600860206001546100ab91906101a6565b601f6100b79190610206565b6100c1919061023a565b60ff901b60001b1990506000816000541690507f8b4d1865cca596fe1320d6ea9d269d32b93eb36a77d1913637ffca48a5ddcde981604051610103919061015c565b60405180910390a15050565b6000819050919050565b6101228161010f565b82525050565b600060208201905061013d6000830184610119565b92915050565b6000819050919050565b61015681610143565b82525050565b6000602082019050610171600083018461014d565b92915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b60006101b18261010f565b91506101bc8361010f565b9250826101cc576101cb610177565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b60006102118261010f565b915061021c8361010f565b9250828203905081811115610234576102336101d7565b5b92915050565b60006102458261010f565b91506102508361010f565b925082820261025e8161010f565b91508282048414831517610275576102746101d7565b5b509291505056fea26469706673582212200bb4f9fbf548baafb0ddb637680f9ed55de35f5e048cd6fcc3855adaa372954164736f6c634300081c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100415760003560e01c806306661abd14610046578063224b610b14610064578063eca8cc2c14610082575b600080fd5b61004e61008c565b60405161005b9190610128565b60405180910390f35b61006c610092565b604051610079919061015c565b60405180910390f35b61008a610098565b005b60015481565b60005481565b6000600860206001546100ab91906101a6565b601f6100b79190610206565b6100c1919061023a565b60ff901b60001b1990506000816000541690507f8b4d1865cca596fe1320d6ea9d269d32b93eb36a77d1913637ffca48a5ddcde981604051610103919061015c565b60405180910390a15050565b6000819050919050565b6101228161010f565b82525050565b600060208201905061013d6000830184610119565b92915050565b6000819050919050565b61015681610143565b82525050565b6000602082019050610171600083018461014d565b92915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b60006101b18261010f565b91506101bc8361010f565b9250826101cc576101cb610177565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b60006102118261010f565b915061021c8361010f565b9250828203905081811115610234576102336101d7565b5b92915050565b60006102458261010f565b91506102508361010f565b925082820261025e8161010f565b91508282048414831517610275576102746101d7565b5b509291505056fea26469706673582212200bb4f9fbf548baafb0ddb637680f9ed55de35f5e048cd6fcc3855adaa372954164736f6c634300081c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 7,
+        "contract": "contracts/CtfChallenge9.sol:CtfChallenge9",
+        "label": "password",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_bytes32"
+      },
+      {
+        "astId": 9,
+        "contract": "contracts/CtfChallenge9.sol:CtfChallenge9",
+        "label": "count",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      }
+    ],
+    "types": {
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

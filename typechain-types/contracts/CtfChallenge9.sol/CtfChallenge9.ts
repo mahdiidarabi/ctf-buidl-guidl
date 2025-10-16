@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
@@ -22,25 +23,19 @@ import type {
 } from "../../common";
 
 export interface CtfChallenge9Interface extends Interface {
-  getFunction(
-    nameOrSignature: "count" | "generateNewPassword" | "password"
-  ): FunctionFragment;
+  getFunction(nameOrSignature: "generateNewPassword"): FunctionFragment;
 
   getEvent(nameOrSignatureOrTopic: "newPasswordGenerated"): EventFragment;
 
-  encodeFunctionData(functionFragment: "count", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "generateNewPassword",
-    values?: undefined
+    values: [BytesLike, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "password", values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: "count", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "generateNewPassword",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "password", data: BytesLike): Result;
 }
 
 export namespace newPasswordGeneratedEvent {
@@ -98,25 +93,23 @@ export interface CtfChallenge9 extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  count: TypedContractMethod<[], [bigint], "view">;
-
-  generateNewPassword: TypedContractMethod<[], [void], "nonpayable">;
-
-  password: TypedContractMethod<[], [string], "view">;
+  generateNewPassword: TypedContractMethod<
+    [password: BytesLike, count: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
   getFunction(
-    nameOrSignature: "count"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
     nameOrSignature: "generateNewPassword"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "password"
-  ): TypedContractMethod<[], [string], "view">;
+  ): TypedContractMethod<
+    [password: BytesLike, count: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
   getEvent(
     key: "newPasswordGenerated"

