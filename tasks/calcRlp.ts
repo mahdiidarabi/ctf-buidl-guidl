@@ -1,115 +1,20 @@
-// import { task } from "hardhat/config";
-// import { HardhatRuntimeEnvironment } from "hardhat/types";
-// import { ethers } from "ethers";
-// import { RLP } from "@ethereumjs/rlp";
-
-// task("calc-rlp", "Calls mintFlag on Challenge12 contract")
-//   .addParam("contract", "The Challenge12 contract address")
-//   .addParam("sender", "The sender address (must have called preMintFlag)")
-//   .addParam("targetBlock", "The target block number (blockNumber[sender] + futureBlocks)")
-//   .setAction(async (taskArgs: { contract: string; sender: string; targetBlock: string }, hre: HardhatRuntimeEnvironment) => {
-//     const { contract: contractAddress, sender, targetBlock } = taskArgs;
-//     const provider = new ethers.JsonRpcProvider("https://optimism.api.onfinality.io/public"); // Or Optimism
-//     const signer = await hre.ethers.getSigner(sender);
-
-//     // Fetch full block header
-//     const block = await provider.send("eth_getBlockByNumber", [
-//       ethers.toQuantity(parseInt(targetBlock)),
-//       false,
-//     ]);
-
-//     console.log("block", block);
-
-//     // Construct header array (post-Merge fields included)
-//     const header = [
-//       block.parentHash,
-//       block.sha3Uncles, // Default if missing
-//       block.miner,
-//       block.stateRoot,
-//       block.transactionsRoot,
-//       block.receiptsRoot,
-//       block.logsBloom,
-//       block.difficulty,
-//       block.number,
-//       block.gasLimit,
-//       block.gasUsed,
-//       block.timestamp,
-//       block.extraData,
-//       block.mixHash, // Post-Merge default
-//       block.nonce, // Post-Merge default
-//       block.baseFeePerGas,
-//       block.withdrawalsRoot, // Post-Merge
-//       block.blobGasUsed,
-//       block.excessBlobGas,
-//       block.parentBeaconBlockRoot,
-//     ].map((val) => Buffer.from(val.slice(2), "hex"));
-
-//     // RLP-encode header
-//     const rlpBytes = RLP.encode(header)
-
-//     // Verify block hash
-//     const blockHash = block.hash;
-//     console.log("blockHash", blockHash);
-//     console.log("rlpBytes", rlpBytes);
-
-//     const computedHash = ethers.keccak256(ethers.hexlify(rlpBytes));
-
-//     if (blockHash !== computedHash) throw new Error(`Invalid RLP encoding: expected ${blockHash}, got ${computedHash}`);
-
-//     // Verify block number window
-//     const currentBlock = await provider.getBlockNumber();
-//     if (currentBlock < parseInt(targetBlock) || currentBlock >= parseInt(targetBlock) + 256) {
-//       throw new Error(`Current block ${currentBlock} is outside valid window [${targetBlock}, ${parseInt(targetBlock) + 256})`);
-//     }
-
-//     // Call mintFlag
-//     // const contract = new ethers.Contract(
-//     //   contractAddress,
-//     //   ["function mintFlag(bytes memory rlpBytes) public"],
-//     //   signer
-//     // );
-//     // const tx = await contract.mintFlag(rlpBytes);
-//     // console.log(`Transaction sent: ${tx.hash}`);
-//     // await tx.wait();
-//     // console.log("mintFlag executed successfully");
-//   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { task } from "hardhat/config";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { ethers } from "ethers";
 import { RLP } from "@ethereumjs/rlp";
-import { keccak256 } from 'ethers';
+import { getCreateAddress, getCreate2Address, keccak256, ethers } from 'ethers';
 
-task("calc-rlp", "Calls mintFlag on Challenge9 contract on Optimism")
-  .addParam("contract", "The Challenge9 contract address")
-  .addParam("sender", "The sender address (must have called preMintFlag)")
-  .addParam("targetBlock", "The target block number (blockNumber[sender] + futureBlocks)")
-  .setAction(async (taskArgs: { contract: string; sender: string; targetBlock: string }, hre: HardhatRuntimeEnvironment) => {
-    const { contract: contractAddress, sender, targetBlock } = taskArgs;
-    // const provider = new ethers.JsonRpcProvider("https://mainnet.optimism.io"); // Optimism mainnet
-    // const signer = await hre.ethers.getSigner(sender);
+task("calc-rlp", "Reads private variables from Challenge9 contract storage")
+  .addParam("sender", "The Challenge deployer address")
+  .addParam("contractAddress", "The Challenge 12 contract address")
+  .setAction(async (taskArgs: { sender: string, contractAddress: string }, hre: HardhatRuntimeEnvironment) => {
+    console.log("fffff")
 
+    const { sender, contractAddress } = taskArgs;
 
-    const provider = new ethers.JsonRpcProvider("https://optimism.api.onfinality.io/public"); // Or Optimism
-    console.log("sender", sender);
     const { deployer } = await hre.getNamedAccounts();
-    console.log("deployer", deployer);
-    const signer = await hre.ethers.getSigner(sender);
+    const signer = await hre.ethers.getSigner(deployer);
 
+    const provider = new ethers.JsonRpcProvider("https://optimism.api.onfinality.io/public");
 
     const contract = new ethers.Contract(
       contractAddress,
@@ -117,14 +22,15 @@ task("calc-rlp", "Calls mintFlag on Challenge9 contract on Optimism")
       signer
     );
     const tx = await contract.preMintFlag();
-    console.log(`Transaction sent: ${tx.hash}`);
+    console.log("Transaction sent:", tx);
     await tx.wait();
     console.log("mintFlag executed successfully");
 
+    // Add sleep for 2 seconds
+    await new Promise(resolve => setTimeout(resolve, 5000));
 
-    // Fetch full block header
     const blockData = await provider.send("eth_getBlockByNumber", [
-      ethers.toQuantity(parseInt(targetBlock)),
+      ethers.toQuantity(parseInt(tx.blockNumber + 2)),
       false,
     ]);
 
@@ -166,14 +72,16 @@ task("calc-rlp", "Calls mintFlag on Challenge9 contract on Optimism")
     console.log('Match:', computedHash === blockData.hash);
 
 
-    // Call mintFlag
     const contract2 = new ethers.Contract(
       contractAddress,
       ["function mintFlag(bytes memory rlpBytes) external"],
       signer
     );
-    const tx2 = await contract.mintFlag(encodedHex);
+    const tx2 = await contract2.mintFlag(`0x${encodedHex}`);
     console.log(`Transaction sent: ${tx.hash}`);
     await tx2.wait();
     console.log("mintFlag executed successfully");
+      
   });
+
+  // npx hardhat calc-rlp --sender 0x0b99DE6969399246fF1901432d7fe63DAC17bF8C --contract-address 0x8c7A3c2c44aB16f693d1731b10C271C7d2967769 --network optimism

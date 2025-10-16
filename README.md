@@ -2,12 +2,12 @@ This repository contains the solutions for  BuidlGuidl CTF challenge (https://ct
 
 The challenge tests users' skills in Solidity focusing on security. 
 
-In the following lines I'll describe each challenge and the solution, you can also found the solution codes in this repo.
+In the following sections I'll describe each challenge and the solution, you can also found the solution codes in this repo.
 
 
 ## Challenge 1
 
-The first challenge only wants users to call registerMe(string memory _name) function of the challenge 1 contract (https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#code). you need to have a wallet to interact with the network (in this case Optimism), and easily can connet your wallet to the optimism scan (https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#writeContract) and call the function (ax). you can also use other ways to call the fucntion like remix ide, etc. 
+The first challenge only wants users to call registerMe(string memory _name) function of the challenge 1 contract (https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#code). you need to have a wallet to interact with the network (in this case Optimism), and easily can connect your wallet to the optimism scan (https://optimistic.etherscan.io/address/0xfa2Aad507B1Fa963A1fd6F8a491A7088Cd4538A5#writeContract) and call the function (ax). you can also use other ways to call the function like remix ide, etc. 
 
 
 
@@ -17,7 +17,7 @@ the requirement of this challenge is msg.sender != tx.origin.
 
 In Solidity msg.sender is the account calling a function and tx.origin is the account (externally owned account) that initiated the transaction (or function call). 
 
-If a user send a transaction (like a function call) with their wallet then msg.sender = tx.origin. but if a user call a function from contract_1 and in that function, there was a call to another contract (like contract_2), in contract_2, msg.sender would be contract_1, and tx.origin would be the user address. 
+If a user send a transaction (like a function call) with their wallet then msg.sender = tx.origin. but if a user call a function from contract_1 and in that function, there was a call to another contract (like contract_2), in the function of contract_2, msg.sender would be contract_1, and tx.origin would be the user address. 
 (ax)
 
 So you only need to have a contract to call the target contract. A simple contract is created for this purpose can be found at contracts/CtfChallenge2.sol file. 
@@ -28,16 +28,16 @@ After deployment and verification of the solution contract for challenge 2 by:
 npm run deplpy:op
 ```
 
-(find deployed contract at depolyments folder)
+(find deployed contract at deployments/optimism folder)
 
- call 
+call 
 
 indirectCall(target_address) functoin and pass challenge2_contract_address as argument. 
 
 
 ## Challenge 3
 
-To pass this challenge you need to have a contract to call the challenge contract just like challenge 2, but with a difference. The contract that calls the cahllenge contract should not have any code in their storage during the call.  
+To pass this challenge you need to have a contract to call the challenge contract just like challenge 2, but with a difference. The contract that calls the challenge contract should not have any code in their storage during the call.  
 But how it's possible?!
 
 Before explaining the solution you need to know that in EVM based networks, there are 2 types of accounts, externally owned and internally owned. 
@@ -48,7 +48,7 @@ For externally owned accounts there is no code, but for internally owned ones th
 
 (ax)
 
-To pass the requirement of this challenge we need to have a contract (for indirect call), with no code in its storage. its impossble unless during the creation of the contract, since the code is not stored yet.
+To pass the requirement of this challenge we need to have a contract (for indirect call), with no code in its storage. its impossible unless during the creation of the contract, since the code is not stored yet.
 
 So we need to call the challenge 3 contract in the constructor of another contract (before storing the code in the solution contract account storage).
 
@@ -80,7 +80,7 @@ If you are not using Hardhat (or EthScafold) I highly recommend to use it, since
 
 The minter address is an HD account with "m/44'/60'/0'/0/12" derivation path and with default mnemonic of Hardhat. 
 
-We do the exact thing like challenge 4 deploy script to find minter address and secret key and then sign the requined message. 
+We do the exact thing like challenge 4 deploy script to find minter address and secret key and then sign the required message. 
 
 The solution is at deploy/004_deploy_ctfchallenge4.ts file.
 
@@ -138,7 +138,7 @@ to check if the signature is valid or not:
 
 the signature is ready! 
 
-Call challenge 4 contract mintFlag fucntion and mint your flag.
+Call challenge 4 contract mintFlag function and mint your flag.
 
 
 
@@ -184,11 +184,11 @@ after deployment of solution contract you need to call startClaim function from 
 
 ## Challenge 6
 
-In challenge 6 you should bypass 3 requirements, twos are about checking a code and a name, and the last one is to have reamined gas between 190,000 and 200,000.
+In challenge 6 you should bypass 3 requirements, twos are about checking a code and a name, and the last one is to have remained gas between 190,000 and 200,000.
 
 I think the easiest way to bypass first 2 requirements is to use the challenge6_contract logic in our solution contract. 
 
-You can fing the way to do this at contracts/CtfChallenge6.sol fild.
+You can find the way to do this at contracts/CtfChallenge6.sol file.
 
 
 After deployment of the solution contract by
@@ -206,11 +206,11 @@ Call its startMint function, you may got an error since the last requirement of 
 challenge 7 is about delegation in EVM. But what is delegation?
 
 In Solidity we have delegation concept. If we call a function from a contract, in the case that function does not exist, the fallback function will be called. 
-And in fallback it's possible to delegate the call to another contract (that has that function) but the changes that function made to the contract storage is applied on the first contract (with the fallback function that delegates the call).
+And in fallback it's possible to delegate the call to another contract (that has that function). But the changes the target (or last) function makes is applied on the first contract (the one with fallback function that delegates the call).
 
 This capability in Solidity allows developer to create a new concept, Upgradeable contracts with Logic and Storage contracts. 
 
-The Storage contract has a fallback function that delegate contract calls to the Logic contract (it's upgradeable because we can change Logic contract address in Storage contrat so the calls will be delegated to a new Logic contract).
+The Storage contract has a fallback function that delegate contract calls to the Logic contract (it's upgradeable because we can change Logic contract address in Storage contract so the calls will be delegated to a new Logic contract).
 
 By checking challenge 7 contract we noticed that we must be the owner of the contract to call mintFlag, but there's no function to claim ownership in the challenge 7 contract. 
 But it has a fallback function and the Logic contract has claimOwnership function. 
@@ -266,7 +266,12 @@ npx hardhat read-storage --contract 0x1Fd913F2250ae5A4d9F8881ADf3153C6e5E2cBb1 -
 
 after getting private variables put them in the deployment script at deploy/009_deploy_ctfchallenge9.ts and deploy and verify the solution contract for challenge 9. 
 
-by calling generateNewPassword(bytes32 password, uint256 count) function, the required password to pass this challenge will be generated and emmited on network. you can see at transaction logs. and pass as argument to  mintFlag function of the challenge 9 contract. 
+```
+npm run deploy:op
+npm run verify:op
+```
+
+by calling generateNewPassword(bytes32 password, uint256 count) function, the required password to pass this challenge will be generated and emitted on network. you can see it at transaction logs. and pass it as argument to  mintFlag function of the challenge 9 contract. 
 
 
 ## Challenge 10
@@ -303,10 +308,13 @@ and call safeTransferFrom (0xb88d4fde)
 
 with these arguments:
 
-0	from	address YOUR_ADDRESS
-1	to	address CHALLENGE_10_CONTRACT_ADDRESS
-2	tokenId	uint256 FLAG_1_TOKEN_ID (in uint)
-3	data	bytes FLAG_9_TOKEN_ID (in hex string padded with 0s to become 32 bytes, 64 characters)
+0	from	(address) YOUR_ADDRESS
+
+1	to	    (address) CHALLENGE_10_CONTRACT_ADDRESS
+
+2	tokenId	(uint256) FLAG_1_TOKEN_ID (in uint)
+
+3	data	(bytes) FLAG_9_TOKEN_ID (in hex string padded with 0s to become 64 characters, 32 bytes)
 
 
 
@@ -353,6 +361,20 @@ but this command won't work for you and you have to change it.
 
 ## Challenge 12
 
+To pass this challenge you need to be fast :)))
+
+First we need to call preMintFlag() function. After calling this function we don't have much time. 
+After 2 blocks and before 256 blocks, we should build RLP bytes for the registered block for you in preMintFlag() plus 2, the registered block can got from blockNumber(YOUR_ADDRESS).
+
+After these steps you need to compute block hash from the RLP encoded bytes and check with the real hash of the block (our registered block number plus 2).
+
+The solution is found at tasks/calcRlp.ts file.
+
+to run it use this command (use your address as sender and challenge 12 contract address as contract-address)
+
+```
+npx hardhat calc-rlp --sender 0x0b99DE6969399246fF1901432d7fe63DAC17bF8C --contract-address 0x8c7A3c2c44aB16f693d1731b10C271C7d2967769 --network optimism
+```
 
 
 
