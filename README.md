@@ -4,6 +4,7 @@ The challenge tests users' skills in Solidity focusing on security.
 
 In the following sections I'll describe each challenge and the solution, you can also found the solution codes in this repo.
 
+# Challenges
 
 ## Challenge 1
 
@@ -377,6 +378,7 @@ npx hardhat calc-rlp --sender 0x0b99DE6969399246fF1901432d7fe63DAC17bF8C --contr
 ```
 
 
+# Run project
 
 
 ## Deploying with hardhat-deploy (Optimism)
@@ -387,8 +389,7 @@ npx hardhat calc-rlp --sender 0x0b99DE6969399246fF1901432d7fe63DAC17bF8C --contr
 PRIVATE_KEY=0x...
 OPTIMISM_RPC_URL=https://mainnet.optimism.io
 OPTIMISM_SEPOLIA_RPC_URL=https://sepolia.optimism.io
-OPTIMISM_ETHERSCAN_API_KEY=your-key
-OPTIMISM_SEPOLIA_ETHERSCAN_API_KEY=your-key
+ETHERSCAN_API_KEY=your-key
 ```
 
 2. Deploy:

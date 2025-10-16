@@ -6,8 +6,8 @@ contract CtfChallenge5 {
     uint256 public callCount;
     uint256 public constant TARGET = 11;
 
-    event recieveCalled();
-    event fallbackCalled();
+    // event recieveCalled();
+    // event fallbackCalled();
 
     constructor(address _challengeAddress) {
         challenge = IChallenge5(_challengeAddress);
