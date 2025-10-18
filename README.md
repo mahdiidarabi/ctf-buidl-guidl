@@ -242,6 +242,8 @@ This capability in Solidity allows developer to create a new concept, Upgradeabl
 
 The Storage contract has a fallback function that delegate contract calls to the Logic contract (it's upgradeable because we can change Logic contract address in Storage contract so the calls will be delegated to a new Logic contract).
 
+[![proxyContract](./pictures/proxyContract.png)](https://medium.com/@social_42205/proxy-contracts-in-solidity-f6f5ffe999bd)
+
 By checking challenge 7 contract we noticed that we must be the owner of the contract to call mintFlag, but there's no function to claim ownership in the challenge 7 contract. 
 But it has a fallback function and the Logic contract has claimOwnership function. 
 So first call claimOwnership by write as proxy (https://optimistic.etherscan.io/address/0xC962D4f4E772415475AA46Eed06cb1F2D4010c0A#writeProxyContract)
@@ -422,6 +424,11 @@ ETHERSCAN_API_KEY=your-key
 ```
 
 2. Deploy:
+
+```
+npm install
+```
+
 
 ```
 npm run deploy:op-sepolia
