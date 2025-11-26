@@ -372,13 +372,13 @@ import { getCreateAddress, getCreate2Address, keccak256, ethers } from 'ethers';
   }
 ```
 
-The first way is to create a contract with CREATE opcode, in this way the contract address is calculated based on deployer address and its nonce. 
+The first way is to create a contract with CREATE opcode, in this way the contract address is calculated based on deployer address and its nonce. You can use this https://www.evmutils.com/compute-address
 
 the second way is to create a contract with CREATE2 opcode, in this way the contract address is calculated based on deployer address, a salt, and the hash of the contract code. 
 
 the optimized way to solve this challenge is to use 2nd way and change salt many times to find an address that its last byes would be equal to deployer address last byte. 
 
-the easier way is to find a nonce that pass the requirement and do many transactions to reach that nonce (a number before that none). and deploy the solution contract. Then the contract address last byte and deployer address last byte will be same.
+the easier way is to find a nonce that pass the requirement and do many transactions to reach that nonce (a number before that none). and deploy the solution contract. Then the contract address last byte and deployer address last byte will be same. 
 
 you can find the non optimized solution at tasks/predictAddress.ts
 
